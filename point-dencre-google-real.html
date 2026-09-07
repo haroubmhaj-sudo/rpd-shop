@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<meta name="description" content="Point d'Encre — premium ink, toner and printer store">
+<title>POINT D'ENCRE — Premium Store</title>
+<style>
+:root{
+ --bg:#06070b;--surface:#0d1017;--surface2:#121722;--line:rgba(255,255,255,.09);
+ --text:#f8fafc;--muted:#98a2b3;--cyan:#00e5ff;--pink:#ff3cac;--gold:#ffd166;
+ --green:#35e08a;--danger:#ff5d73;--shadow:0 25px 80px rgba(0,0,0,.35)
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,Segoe UI,Arial,sans-serif;background:
+ radial-gradient(circle at 10% 0%,rgba(0,229,255,.08),transparent 30%),
+ radial-gradient(circle at 90% 10%,rgba(255,60,172,.08),transparent 28%),var(--bg);
+ color:var(--text);min-height:100vh}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+.container{width:min(1200px,92%);margin:auto}
+.topbar{padding:9px 0;text-align:center;font-size:12px;color:#dce3ec;background:#090b10;border-bottom:1px solid var(--line)}
+header{position:sticky;top:0;z-index:50;background:rgba(6,7,11,.78);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+.nav{height:76px;display:flex;align-items:center;gap:22px}
+.logo{font-size:21px;font-weight:950;letter-spacing:2px;background:linear-gradient(90deg,var(--cyan),#fff,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
+.navlinks{display:flex;gap:18px;margin-left:auto}
+.navlinks a{font-size:13px;color:#c8d0dc}.navlinks a:hover{color:white}
+.actions{display:flex;gap:8px}
+.iconbtn,.primary,.ghost{border:1px solid var(--line);border-radius:12px;padding:10px 13px;background:rgba(255,255,255,.04);color:white}
+.iconbtn:hover,.ghost:hover{border-color:rgba(255,255,255,.25)}
+.primary{background:linear-gradient(135deg,var(--cyan),#2677ff);color:#001014;border:0;font-weight:800}
+.badge{display:inline-flex;min-width:20px;height:20px;align-items:center;justify-content:center;border-radius:99px;background:var(--pink);font-size:11px;margin-left:4px}
+.hero{padding:76px 0 55px;display:grid;grid-template-columns:1.1fr .9fr;gap:45px;align-items:center}
+.kicker{color:var(--cyan);font-size:12px;font-weight:800;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px}
+.hero h1{font-size:clamp(42px,6vw,78px);line-height:.95;letter-spacing:-4px;max-width:760px}
+.hero h1 span{background:linear-gradient(90deg,#fff,var(--cyan),var(--pink));-webkit-background-clip:text;color:transparent}
+.hero p{color:var(--muted);max-width:620px;line-height:1.7;margin:22px 0}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+.hero-card{height:390px;border:1px solid var(--line);border-radius:28px;background:
+ radial-gradient(circle at 30% 25%,rgba(0,229,255,.25),transparent 30%),
+ radial-gradient(circle at 70% 70%,rgba(255,60,172,.23),transparent 32%),#0b0e15;
+ box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.hero-card:after{content:"INK";font-size:150px;font-weight:950;opacity:.035;position:absolute;letter-spacing:-10px}
+.printer{font-size:105px;filter:drop-shadow(0 0 25px rgba(0,229,255,.45));z-index:1}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:10px 0 55px}
+.stat{padding:20px;border:1px solid var(--line);background:rgba(255,255,255,.025);border-radius:18px}.stat b{font-size:25px}.stat small{display:block;color:var(--muted);margin-top:4px}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin-bottom:22px}.section-head h2{font-size:30px}.section-head p{color:var(--muted);font-size:13px}
+.toolbar{display:grid;grid-template-columns:1fr auto auto;gap:10px;margin-bottom:22px}
+.search{display:flex;align-items:center;border:1px solid var(--line);background:var(--surface);border-radius:13px;padding:0 13px}.search input{width:100%;padding:12px;background:none;border:0;outline:0;color:white}
+select{background:var(--surface);color:white;border:1px solid var(--line);border-radius:13px;padding:12px}
+.categories{display:flex;gap:8px;overflow:auto;padding-bottom:5px;margin-bottom:22px}.cat{white-space:nowrap;border:1px solid var(--line);background:transparent;color:#c9d1dc;border-radius:99px;padding:9px 14px}.cat.active{background:white;color:#07080c;border-color:white}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.card{border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border-radius:20px;overflow:hidden;position:relative;transition:.25s;box-shadow:0 10px 35px rgba(0,0,0,.14)}
+.card:hover{transform:translateY(-5px);border-color:rgba(0,229,255,.28)}
+.pic{height:205px;background:#111722;position:relative;overflow:hidden}.pic img{width:100%;height:100%;object-fit:cover;display:block}
+.heart{position:absolute;right:10px;top:10px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:rgba(0,0,0,.45);color:white}
+.info{padding:15px}.tag{font-size:10px;color:var(--cyan);text-transform:uppercase;font-weight:800;letter-spacing:1px}.name{font-weight:800;margin:6px 0;min-height:42px}.desc{font-size:12px;color:var(--muted);line-height:1.5;min-height:36px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:13px}.price{font-size:19px;font-weight:900;color:var(--gold)}.old{text-decoration:line-through;color:#657080;font-size:11px;margin-left:5px}
+.add{padding:9px 11px;border:0;border-radius:10px;background:white;color:#07080c;font-weight:800}.stock{font-size:10px;color:var(--green);margin-top:8px}
+.empty{text-align:center;color:var(--muted);padding:50px;border:1px dashed var(--line);border-radius:20px;grid-column:1/-1}
+.features{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:70px 0}.feature{padding:22px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.025)}.feature b{display:block;margin:9px 0 5px}.feature span{color:var(--muted);font-size:12px;line-height:1.5}
+footer{margin-top:70px;border-top:1px solid var(--line);padding:35px 0;color:var(--muted);font-size:12px}.footerrow{display:flex;justify-content:space-between;gap:20px}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(12px);z-index:100;display:none;align-items:center;justify-content:center;padding:15px}.overlay.show{display:flex}
+.modal{width:min(560px,100%);max-height:90vh;overflow:auto;background:#0c1018;border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:var(--shadow)}.modal.wide{width:min(950px,100%)}
+.modalhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.close{border:0;background:transparent;color:#aaa;font-size:25px}
+.field{margin-bottom:12px}.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px}.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);background:#070a10;color:white;border-radius:11px;padding:12px;outline:0}.field textarea{min-height:80px;resize:vertical}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.cartitem{display:grid;grid-template-columns:65px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}.cartitem img{width:65px;height:55px;object-fit:cover;border-radius:9px}.qty{display:flex;align-items:center;gap:8px}.qty button{width:27px;height:27px;border-radius:7px;border:1px solid var(--line);background:#141a25;color:white}.total{display:flex;justify-content:space-between;font-size:20px;font-weight:900;padding:18px 0}
+.tabs{display:flex;gap:8px;margin-bottom:18px}.tab{padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:transparent;color:white}.tab.active{background:white;color:#000}
+.adminlist{display:grid;gap:10px}.adminrow{display:grid;grid-template-columns:1fr 100px 80px;gap:8px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:10px}.danger{background:var(--danger);color:white;border:0;border-radius:9px;padding:8px}
+.toast{position:fixed;right:18px;bottom:18px;z-index:200;background:#111722;border:1px solid var(--line);padding:13px 16px;border-radius:12px;box-shadow:var(--shadow);transform:translateY(120px);opacity:0;transition:.3s}.toast.show{transform:none;opacity:1}
+.loginbox{text-align:center}.google{width:100%;margin:10px 0;padding:12px;border-radius:11px;border:1px solid var(--line);background:white;color:#111;font-weight:800}.divider{display:flex;align-items:center;gap:10px;color:#667080;font-size:11px;margin:14px 0}.divider:before,.divider:after{content:"";height:1px;background:var(--line);flex:1}
+@media(max-width:950px){.hero{grid-template-columns:1fr}.hero-card{height:270px}.grid{grid-template-columns:repeat(3,1fr)}.features{grid-template-columns:repeat(2,1fr)}.navlinks{display:none}}
+@media(max-width:650px){.nav{height:65px}.hero{padding-top:45px}.stats{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}.toolbar{grid-template-columns:1fr 1fr}.search{grid-column:1/-1}.features{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.footerrow{flex-direction:column}.hero h1{letter-spacing:-2px}.pic{height:160px}}
+</style>
+</head>
+<body>
+<div class="topbar">FREE DELIVERY IN TUNISIA • SECURE CHECKOUT • PREMIUM SUPPORT</div>
+<header><div class="container nav">
+  <a class="logo" href="#">POINT D'ENCRE</a>
+  <nav class="navlinks"><a href="#shop">Shop</a><a href="#features">Services</a><a href="#about">About</a></nav>
+  <div class="actions"><button class="iconbtn" onclick="openModal('loginModal')">👤 <span id="userLabel">Login</span></button><button class="iconbtn" onclick="openCart()">🛒 <span class="badge" id="cartCount">0</span></button></div>
+</div></header>
+
+<main class="container">
+<section class="hero">
+  <div><div class="kicker">Next generation printing store</div><h1>PRINT <span>SMART.</span><br>CREATE MORE.</h1><p>Premium cartridges, ink, toner and printers — selected for reliability, value and everyday performance.</p>
+  <div class="hero-actions"><a class="primary" style="padding:13px 18px;border-radius:12px" href="#shop">Shop collection →</a><button class="ghost" onclick="openModal('loginModal')">Create account</button></div></div>
+  <div class="hero-card"><div class="printer">🖨️</div></div>
+</section>
+<section class="stats"><div class="stat"><b>100%</b><small>Quality-focused selection</small></div><div class="stat"><b>24/7</b><small>Online ordering</small></div><div class="stat"><b>TN 🇹🇳</b><small>Designed for Tunisia</small></div></section>
+
+<section id="shop">
+<div class="section-head"><div><div class="kicker">Collection</div><h2>Shop products</h2></div><p id="resultCount"></p></div>
+<div class="toolbar"><div class="search">⌕ <input id="search" placeholder="Search cartridges, printers, toner..." oninput="render()"></div><select id="sort" onchange="render()"><option value="featured">Featured</option><option value="low">Price: low → high</option><option value="high">Price: high → low</option><option value="name">Name A → Z</option></select><button class="ghost" onclick="showWishlist()">♡ Wishlist</button></div>
+<div class="categories" id="cats"></div>
+<div class="grid" id="products"></div>
+</section>
+
+<section id="features" class="features">
+<div class="feature">⚡<b>Fast ordering</b><span>Simple cart and checkout flow built for mobile and desktop.</span></div>
+<div class="feature">🔒<b>Secure-ready</b><span>Authentication and payment can be connected to a real backend later.</span></div>
+<div class="feature">🇹🇳<b>Tunisia checkout</b><span>Governorate selector and delivery information included.</span></div>
+<div class="feature">✨<b>Premium UX</b><span>Responsive design, micro-interactions, search, filters and wishlist.</span></div>
+</section>
+<section id="about"><div class="section-head"><div><div class="kicker">Point d'Encre</div><h2>Built like a real store</h2></div></div><p style="color:var(--muted);line-height:1.8;max-width:800px">This version keeps the whole storefront in one HTML file and stores demo cart, wishlist, account and product changes locally in the browser. For a real production store, connect authentication, database, orders and payment to a secure server.</p></section>
+</main>
+
+<footer><div class="container footerrow"><span>© 2026 POINT D'ENCRE</span><span>Premium printing supplies • Tunisia</span><button class="ghost" onclick="adminLogin()">Admin</button></div></footer>
+
+<div class="overlay" id="cartModal"><div class="modal"><div class="modalhead"><h2>Your cart</h2><button class="close" onclick="closeModal('cartModal')">×</button></div><div id="cartItems"></div><div class="total"><span>Total</span><span id="cartTotal">0 DT</span></div><button class="primary" style="width:100%;padding:13px" onclick="openCheckout()">Proceed to checkout</button></div></div>
+
+<div class="overlay" id="checkoutModal"><div class="modal"><div class="modalhead"><h2>Checkout</h2><button class="close" onclick="closeModal('checkoutModal')">×</button></div>
+<form onsubmit="placeOrder(event)"><div class="formgrid"><div class="field"><label>FULL NAME</label><input id="cname" required></div><div class="field"><label>PHONE</label><input id="cphone" type="tel" required></div></div>
+<div class="field"><label>GOVERNORATE</label><select id="gov" required></select></div><div class="field"><label>ADDRESS</label><textarea id="caddress" required placeholder="Street, building, city..."></textarea></div>
+<div class="field"><label>DELIVERY NOTE (OPTIONAL)</label><textarea id="cnote" placeholder="Any useful note"></textarea></div>
+<div class="total"><span>Order total</span><span id="checkoutTotal">0 DT</span></div><button class="primary" style="width:100%;padding:13px">Place order</button></form></div></div>
+
+<div class="overlay" id="loginModal"><div class="modal loginbox"><div class="modalhead"><h2>Welcome back</h2><button class="close" onclick="closeModal('loginModal')">×</button></div>
+<p style="color:var(--muted);font-size:13px">Sign in to save your wishlist and checkout faster.</p>
+<div id="googleSignIn" style="display:flex;justify-content:center;margin:10px 0"></div><div class="divider">OR</div>
+<form onsubmit="demoLogin(event)"><div class="field"><input id="email" type="email" placeholder="Email" required></div><div class="field"><input id="pw" type="password" placeholder="Password" required></div><button class="primary" style="width:100%;padding:12px">Sign in</button></form>
+<p style="color:#667080;font-size:10px;margin-top:12px">Sign in securely with your Google account.</p>
+</div></div>
+
+<div class="overlay" id="productModal"><div class="modal"><div class="modalhead"><h2 id="pmTitle"></h2><button class="close" onclick="closeModal('productModal')">×</button></div><div id="pmBody"></div></div></div>
+
+<div class="overlay" id="adminModal"><div class="modal wide"><div class="modalhead"><h2>⚡ Admin Console</h2><button class="close" onclick="closeModal('adminModal')">×</button></div>
+<div class="tabs"><button class="tab active">Products</button><button class="tab" onclick="adminOrders()">Orders</button></div>
+<form onsubmit="addProduct(event)" style="border:1px solid var(--line);padding:15px;border-radius:15px;margin-bottom:16px"><div class="formgrid"><div class="field"><label>PRODUCT NAME</label><input id="aname" required></div><div class="field"><label>PRICE DT</label><input id="aprice" type="number" min="0" step=".01" required></div><div class="field"><label>CATEGORY</label><input id="acat" placeholder="Cartridges" required></div><div class="field"><label>IMAGE URL</label><input id="aimg" type="url" required></div></div><div class="field"><label>DESCRIPTION</label><textarea id="adesc"></textarea></div><button class="primary">+ Add product</button></form>
+<div id="adminList" class="adminlist"></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const governors=["Ariana","Béja","Ben Arous","Bizerte","Gabès","Gafsa","Jendouba","Kairouan","Kasserine","Kébili","Le Kef","Mahdia","Manouba","Médenine","Monastir","Nabeul","Sfax","Sidi Bouzid","Siliana","Sousse","Tataouine","Tozeur","Tunis","Zaghouan"];
+const seed=[
+{id:1,name:"HP 305 XL Black",price:75,old:89,cat:"Cartridges",stock:12,img:"https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?w=800&auto=format&fit=crop&q=80",desc:"High-yield black cartridge for everyday printing."},
+{id:2,name:"Epson Eco 4 Colors",price:155,old:179,cat:"Ink",stock:8,img:"https://images.unsplash.com/photo-1563770660941-20978e870e26?w=800&auto=format&fit=crop&q=80",desc:"Four-color ink pack for vivid documents and photos."},
+{id:3,name:"Canon G3411",price:620,old:699,cat:"Printers",stock:5,img:"https://images.unsplash.com/photo-1612815151568-192518f8be14?w=800&auto=format&fit=crop&q=80",desc:"Reliable all-in-one printer for home and office."},
+{id:4,name:"Brother TN2420 Toner",price:230,old:259,cat:"Toner",stock:9,img:"https://images.unsplash.com/photo-1589561253898-768105ca91a8?w=800&auto=format&fit=crop&q=80",desc:"Laser toner designed for consistent sharp output."},
+{id:5,name:"Canon PG-545 Black",price:68,old:79,cat:"Cartridges",stock:15,img:"https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?w=800&auto=format&fit=crop&q=80",desc:"Compact black cartridge with dependable results."},
+{id:6,name:"HP GT53 Ink Bottle",price:120,old:139,cat:"Ink",stock:20,img:"https://images.unsplash.com/photo-1563770660941-20978e870e26?w=800&auto=format&fit=crop&q=80",desc:"High-volume ink bottle for compatible systems."},
+{id:7,name:"Premium A4 Paper 500",price:24,old:29,cat:"Paper",stock:30,img:"https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=800&auto=format&fit=crop&q=80",desc:"Smooth A4 paper for clean everyday printing."},
+{id:8,name:"Wireless Office Printer",price:890,old:999,cat:"Printers",stock:4,img:"https://images.unsplash.com/photo-1612815151568-192518f8be14?w=800&auto=format&fit=crop&q=80",desc:"Connected printer for modern home-office workflows."}
+];
+let products=JSON.parse(localStorage.getItem("pde_products")||"null")||seed;
+let cart=JSON.parse(localStorage.getItem("pde_cart")||"[]");
+let wishlist=JSON.parse(localStorage.getItem("pde_wish")||"[]");
+let orders=JSON.parse(localStorage.getItem("pde_orders")||"[]");
+let user=JSON.parse(localStorage.getItem("pde_user")||"null");
+let category="All";
+
+function save(){localStorage.setItem("pde_products",JSON.stringify(products));localStorage.setItem("pde_cart",JSON.stringify(cart));localStorage.setItem("pde_wish",JSON.stringify(wishlist));localStorage.setItem("pde_orders",JSON.stringify(orders));localStorage.setItem("pde_user",JSON.stringify(user))}
+function toast(x){const t=document.getElementById("toast");t.textContent=x;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2200)}
+function openModal(id){document.getElementById(id).classList.add("show")}
+function closeModal(id){document.getElementById(id).classList.remove("show")}
+function renderCats(){const cats=["All",...new Set(products.map(p=>p.cat))];document.getElementById("cats").innerHTML=cats.map(c=>`<button class="cat ${c===category?"active":""}" onclick="category='${esc(c)}';render()">${esc(c)}</button>`).join("")}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function render(){
+renderCats();const q=document.getElementById("search").value.toLowerCase();let list=products.filter(p=>(category==="All"||p.cat===category)&&(p.name+" "+p.cat+" "+p.desc).toLowerCase().includes(q));
+const s=document.getElementById("sort").value;if(s==="low")list.sort((a,b)=>a.price-b.price);if(s==="high")list.sort((a,b)=>b.price-a.price);if(s==="name")list.sort((a,b)=>a.name.localeCompare(b.name));
+document.getElementById("resultCount").textContent=list.length+" products";
+document.getElementById("products").innerHTML=list.length?list.map(card).join(""):`<div class="empty">No products found.<br><button class="ghost" style="margin-top:12px" onclick="document.getElementById('search').value='';category='All';render()">Reset filters</button></div>`;
+document.getElementById("cartCount").textContent=cart.reduce((n,x)=>n+x.qty,0);
+document.getElementById("userLabel").textContent=user?(user.name||"Account"):"Login";
+}
+function card(p){const liked=wishlist.includes(p.id);return `<article class="card"><div class="pic"><img loading="lazy" src="${p.img}" alt="${esc(p.name)}"><button class="heart" onclick="toggleWish(${p.id})">${liked?"♥":"♡"}</button></div><div class="info"><div class="tag">${esc(p.cat)}</div><div class="name">${esc(p.name)}</div><div class="desc">${esc(p.desc)}</div><div class="row"><div class="price">${p.price} DT ${p.old?`<span class="old">${p.old}</span>`:""}</div><button class="add" onclick="addCart(${p.id})">Add</button></div><div class="stock">● ${p.stock>0?p.stock+" in stock":"Out of stock"}</div><button class="ghost" style="width:100%;margin-top:10px" onclick="details(${p.id})">View details</button></div></article>`}
+function addCart(id){const p=products.find(x=>x.id===id);if(!p||p.stock<1)return toast("Product unavailable");const x=cart.find(x=>x.id===id);if(x)x.qty=Math.min(x.qty+1,p.stock);else cart.push({id,qty:1});save();render();toast("Added to cart ✓")}
+function toggleWish(id){wishlist=wishlist.includes(id)?wishlist.filter(x=>x!==id):[...wishlist,id];save();render();toast(wishlist.includes(id)?"Added to wishlist":"Removed from wishlist")}
+function showWishlist(){const list=products.filter(p=>wishlist.includes(p.id));document.getElementById("pmTitle").textContent="♡ Wishlist";document.getElementById("pmBody").innerHTML=list.length?list.map(p=>`<div class="cartitem"><img src="${p.img}"><div><b>${esc(p.name)}</b><div style="color:var(--gold)">${p.price} DT</div></div><button class="ghost" onclick="addCart(${p.id});closeModal('productModal')">Add</button></div>`).join(""):"<p style='color:var(--muted)'>Your wishlist is empty.</p>";openModal("productModal")}
+function details(id){const p=products.find(x=>x.id===id);document.getElementById("pmTitle").textContent=p.name;document.getElementById("pmBody").innerHTML=`<img src="${p.img}" style="width:100%;height:260px;object-fit:cover;border-radius:15px"><p style="color:var(--muted);line-height:1.7;margin:15px 0">${esc(p.desc)}</p><div class="total"><span>${p.cat}</span><span style="color:var(--gold)">${p.price} DT</span></div><button class="primary" style="width:100%;padding:13px" onclick="addCart(${p.id});closeModal('productModal')">Add to cart</button>`;openModal("productModal")}
+function openCart(){renderCart();openModal("cartModal")}
+function renderCart(){const box=document.getElementById("cartItems");if(!cart.length){box.innerHTML="<div class='empty'>Your cart is empty.</div>";document.getElementById("cartTotal").textContent="0 DT";return}let total=0;box.innerHTML=cart.map(x=>{const p=products.find(p=>p.id===x.id);if(!p)return"";total+=p.price*x.qty;return `<div class="cartitem"><img src="${p.img}"><div><b>${esc(p.name)}</b><div style="color:var(--gold)">${p.price} DT</div><div class="qty"><button onclick="changeQty(${p.id},-1)">−</button>${x.qty}<button onclick="changeQty(${p.id},1)">+</button></div></div><button class="danger" onclick="removeCart(${p.id})">×</button></div>`}).join("");document.getElementById("cartTotal").textContent=total.toFixed(2)+" DT"}
+function changeQty(id,d){const x=cart.find(x=>x.id===id),p=products.find(p=>p.id===id);if(!x)return;x.qty+=d;if(x.qty<1)cart=cart.filter(y=>y.id!==id);if(p)x.qty=Math.min(x.qty,p.stock);save();render();renderCart()}
+function removeCart(id){cart=cart.filter(x=>x.id!==id);save();render();renderCart()}
+function total(){return cart.reduce((n,x)=>{const p=products.find(p=>p.id===x.id);return n+(p?p.price*x.qty:0)},0)}
+function openCheckout(){if(!cart.length)return toast("Your cart is empty");if(!user){closeModal("cartModal");openModal("loginModal");toast("Please sign in first");return}document.getElementById("gov").innerHTML=governors.map(g=>`<option>${g}</option>`).join("");document.getElementById("checkoutTotal").textContent=total().toFixed(2)+" DT";closeModal("cartModal");openModal("checkoutModal")}
+function placeOrder(e){e.preventDefault();const order={id:"PD"+Date.now().toString().slice(-7),date:new Date().toLocaleString(),customer:document.getElementById("cname").value,phone:document.getElementById("cphone").value,gov:document.getElementById("gov").value,address:document.getElementById("caddress").value,total:total(),items:[...cart],status:"New"};orders.unshift(order);products=products.map(p=>{const x=cart.find(x=>x.id===p.id);return x?{...p,stock:Math.max(0,p.stock-x.qty)}:p});cart=[];save();render();closeModal("checkoutModal");toast("Order "+order.id+" confirmed ✓")}
+function demoLogin(e){e.preventDefault();const email=document.getElementById("email").value;user={name:email.split("@")[0],email};save();closeModal("loginModal");render();toast("Signed in ✓")}
+const GOOGLE_CLIENT_ID="631554867127-ed9u17d8ar39i23a837rfill87vu047n.apps.googleusercontent.com";
+function handleGoogleCredential(response){
+  try{
+    const payload=JSON.parse(atob(response.credential.split(".")[1].replace(/-/g,"+").replace(/_/g,"/")));
+    user={
+      name:payload.name||payload.given_name||"Google User",
+      email:payload.email||"",
+      picture:payload.picture||"",
+      googleSub:payload.sub||""
+    };
+    save();
+    closeModal("loginModal");
+    render();
+    toast("Google sign-in successful ✓");
+  }catch(err){
+    console.error(err);
+    toast("Google sign-in failed");
+  }
+}
+function initGoogle(){
+  if(!window.google || !google.accounts || !google.accounts.id)return;
+  google.accounts.id.initialize({
+    client_id:GOOGLE_CLIENT_ID,
+    callback:handleGoogleCredential
+  });
+  const box=document.getElementById("googleSignIn");
+  if(box){
+    box.innerHTML="";
+    google.accounts.id.renderButton(box,{
+      theme:"outline",
+      size:"large",
+      text:"continue_with",
+      shape:"rectangular",
+      width:320
+    });
+  }
+}
+setTimeout(initGoogle,1000);
+window.addEventListener("load",initGoogle);
+function adminLogin(){const pass=prompt("Admin password");if(pass==="admin2026"){openAdmin()}else if(pass!==null)toast("Incorrect password")}
+function openAdmin(){renderAdmin();openModal("adminModal")}
+function renderAdmin(){document.getElementById("adminList").innerHTML=products.map(p=>`<div class="adminrow"><span><b>${esc(p.name)}</b><small style="display:block;color:var(--muted)">${esc(p.cat)} • ${p.stock} stock</small></span><span>${p.price} DT</span><button class="danger" onclick="deleteProduct(${p.id})">Delete</button></div>`).join("")}
+function addProduct(e){e.preventDefault();products.unshift({id:Date.now(),name:document.getElementById("aname").value,price:+document.getElementById("aprice").value,cat:document.getElementById("acat").value,stock:10,img:document.getElementById("aimg").value,desc:document.getElementById("adesc").value||"Premium printing product."});save();render();renderAdmin();e.target.reset();toast("Product added ✓")}
+function deleteProduct(id){products=products.filter(p=>p.id!==id);cart=cart.filter(x=>x.id!==id);wishlist=wishlist.filter(x=>x!==id);save();render();renderAdmin();toast("Product deleted")}
+function adminOrders(){if(!orders.length)return toast("No orders yet");alert(orders.map(o=>`${o.id} — ${o.customer} — ${o.total.toFixed(2)} DT — ${o.status}`).join("\n"))}
+render();
+</script>
+</body>
+</html>
