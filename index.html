@@ -74,6 +74,9 @@ footer{margin-top:70px;border-top:1px solid var(--line);padding:35px 0;color:var
 .loginbox{text-align:center}.google{width:100%;margin:10px 0;padding:12px;border-radius:11px;border:1px solid var(--line);background:white;color:#111;font-weight:800}.divider{display:flex;align-items:center;gap:10px;color:#667080;font-size:11px;margin:14px 0}.divider:before,.divider:after{content:"";height:1px;background:var(--line);flex:1}
 @media(max-width:950px){.hero{grid-template-columns:1fr}.hero-card{height:270px}.grid{grid-template-columns:repeat(3,1fr)}.features{grid-template-columns:repeat(2,1fr)}.navlinks{display:none}}
 @media(max-width:650px){.nav{height:65px}.hero{padding-top:45px}.stats{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}.toolbar{grid-template-columns:1fr 1fr}.search{grid-column:1/-1}.features{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.footerrow{flex-direction:column}.hero h1{letter-spacing:-2px}.pic{height:160px}}
+
+/* Premium motion layer */
+html{scroll-behavior:smooth}.hero-card{animation:floatCard 5s ease-in-out infinite}.printer{animation:floatPrinter 3.5s ease-in-out infinite}.card{transition:transform .35s ease,box-shadow .35s ease,opacity .6s ease}.card:hover{transform:translateY(-8px)}.feature{transition:transform .35s ease,box-shadow .35s ease}.feature:hover{transform:translateY(-5px)}.primary,.ghost,.add,.iconbtn,.cat{transition:transform .2s ease,box-shadow .25s ease,background .25s ease}.primary:hover,.add:hover{transform:translateY(-2px)}.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}.reveal.visible{opacity:1;transform:none}@keyframes floatCard{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-10px) rotate(.6deg)}}@keyframes floatPrinter{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-7px) scale(1.03)}}
 </style>
 </head>
 <body>
@@ -108,13 +111,13 @@ footer{margin-top:70px;border-top:1px solid var(--line);padding:35px 0;color:var
 <section id="about"><div class="section-head"><div><div class="kicker">Point d'Encre</div><h2>Built like a real store</h2></div></div><p style="color:var(--muted);line-height:1.8;max-width:800px">This version keeps the whole storefront in one HTML file and stores demo cart, wishlist, account and product changes locally in the browser. For a real production store, connect authentication, database, orders and payment to a secure server.</p></section>
 </main>
 
-<footer><div class="container footerrow"><span>© 2026 POINT D'ENCRE</span><span>Premium printing supplies • Tunisia</span><button class="ghost" onclick="adminLogin()">Admin</button></div></footer>
+<footer><div class="container footerrow"><span>© 2026 POINT D'ENCRE</span><span>Premium printing supplies • Tunisia</span></div></footer>
 
 <div class="overlay" id="cartModal"><div class="modal"><div class="modalhead"><h2>Your cart</h2><button class="close" onclick="closeModal('cartModal')">×</button></div><div id="cartItems"></div><div class="total"><span>Total</span><span id="cartTotal">0 DT</span></div><button class="primary" style="width:100%;padding:13px" onclick="openCheckout()">Proceed to checkout</button></div></div>
 
 <div class="overlay" id="checkoutModal"><div class="modal"><div class="modalhead"><h2>Checkout</h2><button class="close" onclick="closeModal('checkoutModal')">×</button></div>
 <form onsubmit="placeOrder(event)"><div class="formgrid"><div class="field"><label>FULL NAME</label><input id="cname" required></div><div class="field"><label>PHONE</label><input id="cphone" type="tel" required></div></div>
-<div class="field"><label>GOVERNORATE</label><select id="gov" required></select></div><div class="field"><label>ADDRESS</label><textarea id="caddress" required placeholder="Street, building, city..."></textarea></div>
+<div class="field"><label>GOVERNORATE</label><select id="gov" required></select></div><div class="field"><label>CITY / AREA</label><input id="ccity" placeholder="Your city or area" required></div><div class="field"><label>ADDRESS</label><textarea id="caddress" required placeholder="Street, building, city..."></textarea></div>
 <div class="field"><label>DELIVERY NOTE (OPTIONAL)</label><textarea id="cnote" placeholder="Any useful note"></textarea></div>
 <div class="total"><span>Order total</span><span id="checkoutTotal">0 DT</span></div><button class="primary" style="width:100%;padding:13px">Place order</button></form></div></div>
 
@@ -131,7 +134,7 @@ footer{margin-top:70px;border-top:1px solid var(--line);padding:35px 0;color:var
 <div class="tabs"><button class="tab active">Products</button><button class="tab" onclick="adminOrders()">Orders</button></div>
 <form onsubmit="addProduct(event)" style="border:1px solid var(--line);padding:15px;border-radius:15px;margin-bottom:16px"><div class="formgrid"><div class="field"><label>PRODUCT NAME</label><input id="aname" required></div><div class="field"><label>PRICE DT</label><input id="aprice" type="number" min="0" step=".01" required></div><div class="field"><label>CATEGORY</label><input id="acat" placeholder="Cartridges" required></div><div class="field"><label>IMAGE URL</label><input id="aimg" type="url" required></div></div><div class="field"><label>DESCRIPTION</label><textarea id="adesc"></textarea></div><button class="primary">+ Add product</button></form>
 <div id="adminList" class="adminlist"></div></div></div>
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast"></div><form name="orders" method="POST" data-netlify="true" hidden><input type="hidden" name="form-name" value="orders"><input name="order_id"><input name="customer"><input name="email"><input name="phone"><input name="governorate"><input name="city"><input name="address"><input name="note"><input name="total"><input name="items"></form>
 
 <script>
 const governors=["Ariana","Béja","Ben Arous","Bizerte","Gabès","Gafsa","Jendouba","Kairouan","Kasserine","Kébili","Le Kef","Mahdia","Manouba","Médenine","Monastir","Nabeul","Sfax","Sidi Bouzid","Siliana","Sousse","Tataouine","Tozeur","Tunis","Zaghouan"];
@@ -177,8 +180,9 @@ function changeQty(id,d){const x=cart.find(x=>x.id===id),p=products.find(p=>p.id
 function removeCart(id){cart=cart.filter(x=>x.id!==id);save();render();renderCart()}
 function total(){return cart.reduce((n,x)=>{const p=products.find(p=>p.id===x.id);return n+(p?p.price*x.qty:0)},0)}
 function openCheckout(){if(!cart.length)return toast("Your cart is empty");if(!user){closeModal("cartModal");openModal("loginModal");toast("Please sign in first");return}document.getElementById("gov").innerHTML=governors.map(g=>`<option>${g}</option>`).join("");document.getElementById("checkoutTotal").textContent=total().toFixed(2)+" DT";closeModal("cartModal");openModal("checkoutModal")}
-function placeOrder(e){e.preventDefault();const order={id:"PD"+Date.now().toString().slice(-7),date:new Date().toLocaleString(),customer:document.getElementById("cname").value,phone:document.getElementById("cphone").value,gov:document.getElementById("gov").value,address:document.getElementById("caddress").value,total:total(),items:[...cart],status:"New"};orders.unshift(order);products=products.map(p=>{const x=cart.find(x=>x.id===p.id);return x?{...p,stock:Math.max(0,p.stock-x.qty)}:p});cart=[];save();render();closeModal("checkoutModal");toast("Order "+order.id+" confirmed ✓")}
-function demoLogin(e){e.preventDefault();const email=document.getElementById("email").value;user={name:email.split("@")[0],email};save();closeModal("loginModal");render();toast("Signed in ✓")}
+async function placeOrder(e){e.preventDefault();if(!cart.length)return toast("Your cart is empty");const order={id:"PD"+Date.now().toString().slice(-7),date:new Date().toLocaleString(),customer:document.getElementById("cname").value,phone:document.getElementById("cphone").value,gov:document.getElementById("gov").value,city:document.getElementById("ccity").value,address:document.getElementById("caddress").value,note:document.getElementById("cnote").value,email:user?.email||"",total:total(),items:[...cart],status:"New"};orders.unshift(order);products=products.map(p=>{const x=cart.find(x=>x.id===p.id);return x?{...p,stock:Math.max(0,p.stock-x.qty)}:p});try{const fd=new URLSearchParams();fd.append("form-name","orders");fd.append("order_id",order.id);fd.append("customer",order.customer);fd.append("email",order.email);fd.append("phone",order.phone);fd.append("governorate",order.gov);fd.append("city",order.city);fd.append("address",order.address);fd.append("note",order.note);fd.append("total",order.total.toFixed(2)+" DT");fd.append("items",order.items.map(x=>{const p=products.find(p=>p.id===x.id);return p?`${p.name} x${x.qty}`:""}).join(", "));await fetch("/",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:fd.toString()});}catch(err){console.warn("Order notification submission failed",err)}cart=[];save();render();closeModal("checkoutModal");toast("Order "+order.id+" confirmed ✓");speakWelcome(order.customer)}
+function speakWelcome(name){if("speechSynthesis" in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(`Welcome to Point d Encre, ${name}`);u.rate=.95;u.pitch=1.02;speechSynthesis.speak(u)}}
+function demoLogin(e){e.preventDefault();const email=document.getElementById("email").value;user={name:email.split("@")[0],email};save();closeModal("loginModal");render();toast("Welcome ✓");speakWelcome(user.name)}
 const GOOGLE_CLIENT_ID="631554867127-ed9u17d8ar39i23a837rfill87vu047n.apps.googleusercontent.com";
 function handleGoogleCredential(response){
   try{
@@ -192,7 +196,8 @@ function handleGoogleCredential(response){
     save();
     closeModal("loginModal");
     render();
-    toast("Google sign-in successful ✓");
+    toast("Welcome ✓");
+    speakWelcome(user.name);
   }catch(err){
     console.error(err);
     toast("Google sign-in failed");
@@ -218,12 +223,14 @@ function initGoogle(){
 }
 setTimeout(initGoogle,1000);
 window.addEventListener("load",initGoogle);
-function adminLogin(){const pass=prompt("Admin password");if(pass==="admin2026"){openAdmin()}else if(pass!==null)toast("Incorrect password")}
+function adminLogin(){const pass=prompt("Admin password");if(pass==="haroun2011"){openAdmin()}else if(pass!==null)toast("Incorrect password")}
+document.addEventListener("keydown",e=>{if(e.ctrlKey&&e.shiftKey&&e.key.toLowerCase()==="a"){e.preventDefault();adminLogin()}});
 function openAdmin(){renderAdmin();openModal("adminModal")}
 function renderAdmin(){document.getElementById("adminList").innerHTML=products.map(p=>`<div class="adminrow"><span><b>${esc(p.name)}</b><small style="display:block;color:var(--muted)">${esc(p.cat)} • ${p.stock} stock</small></span><span>${p.price} DT</span><button class="danger" onclick="deleteProduct(${p.id})">Delete</button></div>`).join("")}
 function addProduct(e){e.preventDefault();products.unshift({id:Date.now(),name:document.getElementById("aname").value,price:+document.getElementById("aprice").value,cat:document.getElementById("acat").value,stock:10,img:document.getElementById("aimg").value,desc:document.getElementById("adesc").value||"Premium printing product."});save();render();renderAdmin();e.target.reset();toast("Product added ✓")}
 function deleteProduct(id){products=products.filter(p=>p.id!==id);cart=cart.filter(x=>x.id!==id);wishlist=wishlist.filter(x=>x!==id);save();render();renderAdmin();toast("Product deleted")}
 function adminOrders(){if(!orders.length)return toast("No orders yet");alert(orders.map(o=>`${o.id} — ${o.customer} — ${o.total.toFixed(2)} DT — ${o.status}`).join("\n"))}
+const revealObserver=new IntersectionObserver(entries=>entries.forEach(x=>{if(x.isIntersecting)x.target.classList.add("visible")}),{threshold:.08});document.querySelectorAll("section,.feature,.card").forEach(el=>{el.classList.add("reveal");revealObserver.observe(el)});
 render();
 </script>
 </body>
